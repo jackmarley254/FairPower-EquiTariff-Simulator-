@@ -68,12 +68,3 @@ Jackson: Backend Developer (API & Tariff Logic)
 Ndirangu Juliet: Policy Lead & Frontend Developer
 
 Built with ❤️ for equitable energy access in Kenya.
-
-
-### Step 2: Commit and Push
-Since this directly addresses the documentation issue, you can commit it to your feature branch using the magic words to close out the issue once it's merged into `dev`:
-
-```bash
-git add README.md
-git commit -m "docs: write comprehensive README for local setup and API overview (closes #4)"
-git push origin feature/backend
