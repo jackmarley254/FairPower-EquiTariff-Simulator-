@@ -1,0 +1,17 @@
+name: equitariff
+channels:
+  - defaults
+  - conda-forge
+dependencies:
+  - python=3.10
+  - fastapi
+  - uvicorn
+  - pydantic
+  - joblib
+  - scikit-learn
+  - numpy
+  - pandas
+  - pytest
+  - jupyter
+  - requests
+  - matplotlib
