@@ -3,7 +3,8 @@ from typing import Literal
 
 from backend.schemas import (
     CalculateTariffRequest, CalculateTariffResponse, 
-    SimulationScenarioRequest, SimulationScenarioResponse, SegmentMetrics
+    SimulationScenarioRequest, SimulationScenarioResponse, SegmentMetrics,
+    SegmentDefinition, AffordabilityMetricsResponse
 )
 from backend.services import TariffLogicEngine, MLService
 
@@ -105,4 +106,47 @@ async def simulate_scenario(request: SimulationScenarioRequest):
         revenue_reconciliation_ratio=round(ratio, 4),
         is_sustainable=ratio >= 1.0,  # Sustainability threshold 
         segment_metrics=metrics
+    )
+
+@app.get("/segments", response_model=Dict[str, SegmentDefinition], tags=["Insights"])
+async def get_segments():
+    """Returns the definitions and profiles of the 4 household segments [cite: 153-157]."""
+    return {
+        "A": SegmentDefinition(
+            name="Vulnerable",
+            description="Rural, high poverty index, highly sensitive to price changes.",
+            typical_consumption="0 - 40 kWh",
+            appliance_profile="Few appliances (e.g., lighting, radio)."
+        ),
+        "B": SegmentDefinition(
+            name="Lower-Middle",
+            description="Urban moderate, growing consumption needs.",
+            typical_consumption="41 - 100 kWh",
+            appliance_profile="Basic appliances (e.g., TV, small fridge)."
+        ),
+        "C": SegmentDefinition(
+            name="Upper-Middle",
+            description="Suburban, comfortable income levels.",
+            typical_consumption="101 - 300 kWh",
+            appliance_profile="Multiple appliances (e.g., washing machine, microwave)."
+        ),
+        "D": SegmentDefinition(
+            name="High Income",
+            description="Urban elite, low price elasticity.",
+            typical_consumption="300+ kWh",
+            appliance_profile="All standard appliances, potentially AC/water heaters."
+        )
+    }
+
+@app.get("/metrics/affordability", response_model=AffordabilityMetricsResponse, tags=["Insights"])
+async def get_affordability_metrics():
+    """
+    Returns baseline affordability metrics for the dashboard's initial load.
+    In production, this would calculate aggregates from the master dataset.
+    """
+    return AffordabilityMetricsResponse(
+        national_poverty_rate=39.8,       # From KCHS 2022 Data [cite: 86-87]
+        baseline_energy_burden_avg=14.5,  # Mock starting value > 10% threshold
+        target_burden_threshold=10.0,
+        gini_coefficient_estimate=0.45    # Mock starting inequality metric
     )

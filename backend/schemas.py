@@ -63,3 +63,16 @@ class SimulationScenarioResponse(BaseModel):
     revenue_reconciliation_ratio: float = Field(..., description="Total Revenue / Total Cost ")
     is_sustainable: bool = Field(..., description="True if ratio is >= 1.0 ")
     segment_metrics: Dict[Literal["A", "B", "C", "D"], SegmentMetrics]
+
+# --- DASHBOARD INSIGHTS (Issues #1 & #4) ---
+class SegmentDefinition(BaseModel):
+    name: str = Field(..., description="Segment classification name")
+    description: str = Field(..., description="General demographic description")
+    typical_consumption: str = Field(..., description="Expected consumption range")
+    appliance_profile: str = Field(..., description="Typical appliance ownership")
+
+class AffordabilityMetricsResponse(BaseModel):
+    national_poverty_rate: float = Field(39.8, description="Baseline national poverty rate (%)")
+    baseline_energy_burden_avg: float = Field(..., description="Average percentage of income spent on electricity")
+    target_burden_threshold: float = Field(10.0, description="International standard for energy poverty (%)")
+    gini_coefficient_estimate: float = Field(..., description="Estimated inequality in energy expenditure")
