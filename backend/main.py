@@ -1,5 +1,6 @@
 from fastapi import FastAPI, HTTPException
-from typing import Literal
+from fastapi.responses import RedirectResponse
+from typing import Literal, Dict
 
 from backend.schemas import (
     CalculateTariffRequest, CalculateTariffResponse, 
@@ -13,6 +14,11 @@ app = FastAPI(
     description="Backend simulator for equitable tariff design.",
     version="1.0.0"
 )
+
+@app.get("/", include_in_schema=False)
+async def root_redirect():
+    """Redirects the root URL directly to the Swagger UI."""
+    return RedirectResponse(url="/docs")
 
 @app.get("/health", tags=["System"])
 async def health_check():
